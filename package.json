@@ -1,0 +1,14 @@
+{
+  "name": "comment-craft-extension",
+  "version": "1.0.0",
+  "description": "🚀 **AI-powered comment responses for social media platforms**",
+  "main": "background.js",
+  "scripts": {
+    "start": "web-ext run --verbose",
+    "build": "web-ext build --artifacts-dir=dist/",
+    "lint": "web-ext lint"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

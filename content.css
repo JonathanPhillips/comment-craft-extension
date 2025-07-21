@@ -1,0 +1,120 @@
+/* Additional styles for Comment Craft extension */
+/* Styles are primarily defined in content.js for better encapsulation */
+
+/* Ensure our elements don't interfere with site styles */
+.comment-craft-button,
+.comment-craft-panel,
+.comment-craft-overlay {
+  all: initial !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .comment-craft-panel {
+    width: 90vw !important;
+    max-width: none !important;
+    padding: 16px !important;
+  }
+  
+  .comment-craft-response-types {
+    grid-template-columns: 1fr !important;
+    gap: 6px !important;
+  }
+  
+  .comment-craft-button {
+    font-size: 10px !important;
+    padding: 4px 8px !important;
+  }
+}
+
+/* Dark mode compatibility - both system preference and site-specific */
+@media (prefers-color-scheme: dark),
+html[dark], html[data-theme="dark"], body[theme="dark"], 
+[data-dark-mode="true"], .dark-mode, .theme-dark {
+  .comment-craft-button {
+    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%) !important;
+    color: white !important;
+    border: 2px solid #a855f7 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+    box-shadow: 0 2px 8px rgba(124, 58, 237, 0.3) !important;
+  }
+  
+  .comment-craft-button:hover {
+    background: linear-gradient(135deg, #8b5cf6 0%, #c084fc 100%) !important;
+    border-color: #c084fc !important;
+    box-shadow: 0 4px 16px rgba(139, 92, 246, 0.5) !important;
+  }
+  
+  .comment-craft-panel {
+    background: #1f2937 !important;
+    color: #f9fafb !important;
+    border: 1px solid #374151 !important;
+  }
+  
+  .comment-craft-original,
+  .comment-craft-result {
+    background: #374151 !important;
+    color: #f9fafb !important;
+    border-color: #4b5563 !important;
+  }
+  
+  .comment-craft-custom-prompt {
+    background: #374151 !important;
+    color: #f9fafb !important;
+    border-color: #4b5563 !important;
+  }
+  
+  .comment-craft-response-type {
+    background: #374151 !important;
+    color: #f9fafb !important;
+    border-color: #4b5563 !important;
+  }
+  
+  .comment-craft-response-type.selected {
+    border-color: #7c3aed !important;
+    background: #312e81 !important;
+    color: #c4b5fd !important;
+  }
+  
+  .comment-craft-close {
+    color: #d1d5db !important;
+  }
+  
+  .comment-craft-copy {
+    background: #374151 !important;
+    color: #7c3aed !important;
+    border-color: #7c3aed !important;
+  }
+  
+  .comment-craft-use {
+    background: #7c3aed !important;
+    color: white !important;
+  }
+}
+
+/* YouTube-specific dark mode detection */
+html[dark] .comment-craft-button,
+ytd-app[dark] .comment-craft-button,
+[dark] .comment-craft-button {
+  background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%) !important;
+  color: white !important;
+  border: 2px solid #a855f7 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7) !important;
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.4) !important;
+  font-weight: 600 !important;
+}
+
+/* Ensure visibility on any dark background */
+.comment-craft-button {
+  position: relative !important;
+  z-index: 10 !important;
+}
+
+/* Force visibility with outline as backup */
+@supports (outline-offset: 2px) {
+  .comment-craft-button {
+    outline: 1px solid rgba(255, 255, 255, 0.2) !important;
+    outline-offset: 1px !important;
+  }
+}

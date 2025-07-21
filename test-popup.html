@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { 
+            width: 300px; 
+            padding: 20px; 
+            font-family: Arial; 
+        }
+        .status { 
+            padding: 10px; 
+            margin: 10px 0; 
+            border-radius: 5px; 
+        }
+        .success { 
+            background: #d4edda; 
+            border: 1px solid #c3e6cb; 
+        }
+        .error { 
+            background: #f8d7da; 
+            border: 1px solid #f5c6cb; 
+        }
+        button { 
+            padding: 10px; 
+            margin: 5px; 
+            cursor: pointer; 
+            width: 100%; 
+        }
+    </style>
+</head>
+<body>
+    <h3>Extension Test</h3>
+    
+    <div id="status" class="status success">
+        ✅ Extension popup is working!
+    </div>
+    
+    <button onclick="testContentScript()">Test Content Script</button>
+    <button onclick="checkCurrentTab()">Check Current Tab</button>
+    <button onclick="injectManually()">Manual Inject</button>
+    
+    <div id="results"></div>
+    
+    <script>
+        // Add debugging at the top
+        console.log('Popup script starting...');
+        console.log('typeof browser:', typeof browser);
+        console.log('typeof chrome:', typeof chrome);
+        console.log('window.browser:', window.browser);
+        console.log('window.chrome:', window.chrome);
+        
+        async function testContentScript() {
+            const results = document.getElementById('results');
+            results.innerHTML = '<p>Testing content script...</p>';
+            
+            try {
+                // Get current tab
+                const api = typeof browser !== 'undefined' ? browser : chrome;
+                const tabs = await api.tabs.query({active: true, currentWindow: true});
+                const tab = tabs[0];
+                
+                results.innerHTML += `<p>Current tab: ${tab.url}</p>`;
+                
+                if (tab.url.includes('youtube.com')) {
+                    results.innerHTML += '<p>✅ On YouTube</p>';
+                } else {
+                    results.innerHTML += '<p>❌ Not on YouTube</p>';
+                }
+                
+            } catch (error) {
+                results.innerHTML += `<p>❌ Error: ${error.message}</p>`;
+            }
+        }
+        
+        async function checkCurrentTab() {
+            const results = document.getElementById('results');
+            try {
+                const api = typeof browser !== 'undefined' ? browser : chrome;
+                const tabs = await api.tabs.query({active: true, currentWindow: true});
+                const tab = tabs[0];
+                
+                results.innerHTML = `
+                    <p><strong>Current Tab Info:</strong></p>
+                    <p>URL: ${tab.url}</p>
+                    <p>Title: ${tab.title}</p>
+                    <p>Status: ${tab.status}</p>
+                `;
+            } catch (error) {
+                results.innerHTML = `<p>❌ Error: ${error.message}</p>`;
+            }
+        }
+        
+        function injectManually() {
+            const results = document.getElementById('results');
+            results.innerHTML = '<p>⏳ Step 1: Starting manual injection...</p>';
+            
+            console.log('Manual inject button clicked');
+            
+            // Check API availability first
+            let api;
+            if (typeof browser !== 'undefined' && browser.tabs) {
+                api = browser;
+                results.innerHTML += '<p>✅ Step 2: Firefox browser API detected</p>';
+                console.log('Using Firefox browser API');
+            } else if (typeof chrome !== 'undefined' && chrome.tabs) {
+                api = chrome;
+                results.innerHTML += '<p>✅ Step 2: Chrome API detected</p>';
+                console.log('Using Chrome API');
+            } else {
+                results.innerHTML += '<p>❌ Step 2: No extension API available</p>';
+                console.error('No extension API available');
+                console.log('browser:', typeof browser, browser);
+                console.log('chrome:', typeof chrome, chrome);
+                return;
+            }
+            
+            // Step 3: Get active tab
+            results.innerHTML += '<p>⏳ Step 3: Getting active tab...</p>';
+            
+            api.tabs.query({active: true, currentWindow: true})
+                .then(tabs => {
+                    console.log('Tabs query result:', tabs);
+                    
+                    if (!tabs || tabs.length === 0) {
+                        throw new Error('No active tab found');
+                    }
+                    
+                    const tab = tabs[0];
+                    results.innerHTML += `<p>✅ Step 3: Found active tab: ${tab.url}</p>`;
+                    
+                    // Step 4: Execute script
+                    results.innerHTML += '<p>⏳ Step 4: Executing injection script...</p>';
+                    
+                    return api.tabs.executeScript(tab.id, {
+                        code: `
+                            console.log("🟢 MANUAL INJECTION EXECUTING ON:", window.location.href);
+                            
+                            // Remove any existing manual injection
+                            const existing = document.getElementById('manual-injection-test');
+                            if (existing) {
+                                existing.remove();
+                                console.log("🟢 Removed existing injection");
+                            }
+                            
+                            // Create new element
+                            const manualDiv = document.createElement('div');
+                            manualDiv.id = 'manual-injection-test';
+                            manualDiv.innerHTML = '🟢 MANUAL INJECTION SUCCESS!';
+                            manualDiv.style.cssText = 'position:fixed!important;top:150px!important;right:50px!important;background:lime!important;color:black!important;padding:20px!important;z-index:9999999!important;border:5px solid red!important;font-size:18px!important;font-weight:bold!important;border-radius:10px!important;cursor:pointer!important;box-shadow:0 0 20px lime!important;';
+                            
+                            manualDiv.onclick = () => {
+                                alert('Manual injection click works! URL: ' + window.location.href);
+                            };
+                            
+                            document.body.appendChild(manualDiv);
+                            console.log("🟢 Manual injection element added to body");
+                            
+                            // Also change title
+                            document.title = '🟢 MANUAL SUCCESS - ' + document.title.replace(/🟢 MANUAL SUCCESS - /g, '');
+                            
+                            // Return success message
+                            'INJECTION_SUCCESS';
+                        `
+                    });
+                })
+                .then(result => {
+                    console.log('Execute script result:', result);
+                    results.innerHTML += '<p>✅ Step 4: Script executed successfully!</p>';
+                    results.innerHTML += `<p>📝 Result: ${JSON.stringify(result)}</p>`;
+                    results.innerHTML += '<p>🎉 Look for a bright green box on the page!</p>';
+                })
+                .catch(error => {
+                    console.error('Manual injection error:', error);
+                    results.innerHTML += `<p>❌ Error: ${error.message}</p>`;
+                    results.innerHTML += `<p>📝 Error details: ${JSON.stringify(error)}</p>`;
+                    
+                    // Try alternative method
+                    if (api && api.tabs) {
+                        results.innerHTML += '<p>⏳ Trying alternative injection method...</p>';
+                        
+                        api.tabs.query({active: true, currentWindow: true})
+                            .then(tabs => {
+                                if (tabs[0]) {
+                                    return api.tabs.insertCSS(tabs[0].id, {
+                                        code: `
+                                            body::after {
+                                                content: "🟢 CSS INJECTION WORKS!";
+                                                position: fixed !important;
+                                                top: 250px !important;
+                                                right: 50px !important;
+                                                background: orange !important;
+                                                color: black !important;
+                                                padding: 15px !important;
+                                                z-index: 9999999 !important;
+                                                border: 3px solid red !important;
+                                                font-size: 16px !important;
+                                                font-weight: bold !important;
+                                            }
+                                        `
+                                    });
+                                }
+                            })
+                            .then(() => {
+                                results.innerHTML += '<p>🎨 CSS injection attempted as fallback</p>';
+                            })
+                            .catch(cssError => {
+                                console.error('CSS injection also failed:', cssError);
+                                results.innerHTML += `<p>❌ CSS injection also failed: ${cssError.message}</p>`;
+                            });
+                    }
+                });
+        }
+        
+        // Test that popup is working
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Extension popup loaded');
+        });
+    </script>
+</body>
+</html>

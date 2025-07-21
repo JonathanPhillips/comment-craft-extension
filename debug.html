@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Comment Craft Debug</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .debug-info { background: #f5f5f5; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        .error { background: #ffe6e6; border: 1px solid #ff9999; }
+        .success { background: #e6ffe6; border: 1px solid #99ff99; }
+        button { padding: 10px 15px; margin: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Comment Craft Extension Debug</h1>
+    
+    <div id="status" class="debug-info">
+        <h3>Extension Status</h3>
+        <p id="extensionStatus">Checking...</p>
+    </div>
+    
+    <div class="debug-info">
+        <h3>API Keys Status</h3>
+        <p id="apiStatus">Checking...</p>
+        <button onclick="checkApiKeys()">Check API Keys</button>
+    </div>
+    
+    <div class="debug-info">
+        <h3>Test Extension Functions</h3>
+        <button onclick="testBackgroundMessage()">Test Background Message</button>
+        <button onclick="testStorage()">Test Storage</button>
+        <button onclick="createTestButton()">Create Test Button</button>
+    </div>
+    
+    <div id="testArea" class="debug-info">
+        <h3>Test Area</h3>
+        <p>Test comment for extension functionality</p>
+    </div>
+    
+    <div id="logs" class="debug-info">
+        <h3>Debug Logs</h3>
+        <div id="logOutput"></div>
+    </div>
+
+    <script>
+        // Override console.log to show in page
+        const originalLog = console.log;
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            const logOutput = document.getElementById('logOutput');
+            const logEntry = document.createElement('div');
+            logEntry.textContent = args.join(' ');
+            logEntry.style.margin = '2px 0';
+            logEntry.style.fontSize = '12px';
+            logOutput.appendChild(logEntry);
+            logOutput.scrollTop = logOutput.scrollHeight;
+        };
+
+        // Check if extension is loaded
+        function checkExtensionStatus() {
+            const statusEl = document.getElementById('extensionStatus');
+            if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.id) {
+                statusEl.textContent = '✅ Extension loaded successfully';
+                statusEl.parentElement.className = 'debug-info success';
+            } else {
+                statusEl.textContent = '❌ Extension not loaded or not available';
+                statusEl.parentElement.className = 'debug-info error';
+            }
+        }
+
+        async function checkApiKeys() {
+            const apiStatus = document.getElementById('apiStatus');
+            try {
+                const settings = await chrome.storage.sync.get(['openaiKey', 'anthropicKey', 'googleKey']);
+                const keys = Object.keys(settings).filter(k => k.endsWith('Key') && settings[k]);
+                
+                if (keys.length === 0) {
+                    apiStatus.textContent = '❌ No API keys configured';
+                } else {
+                    apiStatus.textContent = `✅ ${keys.length} API key(s) configured: ${keys.join(', ')}`;
+                }
+            } catch (error) {
+                apiStatus.textContent = '❌ Error checking API keys: ' + error.message;
+            }
+        }
+
+        async function testBackgroundMessage() {
+            console.log('Testing background message...');
+            try {
+                const response = await chrome.runtime.sendMessage({
+                    action: 'generateResponse',
+                    data: {
+                        originalComment: 'This is a test comment',
+                        responseType: 'funny',
+                        prompt: 'Generate a test response',
+                        llmProvider: 'openai'
+                    }
+                });
+                console.log('Background response:', response);
+            } catch (error) {
+                console.error('Background message test failed:', error);
+            }
+        }
+
+        async function testStorage() {
+            console.log('Testing storage...');
+            try {
+                await chrome.storage.sync.set({ testKey: 'testValue' });
+                const result = await chrome.storage.sync.get(['testKey']);
+                console.log('Storage test result:', result);
+                await chrome.storage.sync.remove(['testKey']);
+            } catch (error) {
+                console.error('Storage test failed:', error);
+            }
+        }
+
+        function createTestButton() {
+            console.log('Creating test button...');
+            const testArea = document.getElementById('testArea');
+            
+            // Remove existing test button
+            const existingBtn = testArea.querySelector('.comment-craft-button');
+            if (existingBtn) existingBtn.remove();
+            
+            const testButton = document.createElement('button');
+            testButton.className = 'comment-craft-button';
+            testButton.textContent = '✨ Craft Response';
+            testButton.onclick = () => {
+                console.log('Test button clicked!');
+                alert('Test button works!');
+            };
+            
+            testArea.appendChild(testButton);
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            checkExtensionStatus();
+            checkApiKeys();
+            console.log('Debug page loaded');
+        });
+    </script>
+</body>
+</html>

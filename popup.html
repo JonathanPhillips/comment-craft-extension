@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Comment Craft</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <div class="header">
+      <div class="logo">✨</div>
+      <h1>Comment Craft</h1>
+      <div class="version">v1.0.0</div>
+    </div>
+    
+    <div class="status-section">
+      <div class="status" id="status">
+        <div class="status-indicator" id="statusIndicator"></div>
+        <span id="statusText">Not configured</span>
+      </div>
+    </div>
+    
+    <div class="quick-settings">
+      <div class="setting-row">
+        <label for="llmProvider">Default LLM:</label>
+        <select id="llmProvider">
+          <option value="openai">OpenAI GPT</option>
+          <option value="anthropic">Claude</option>
+          <option value="google">Gemini</option>
+        </select>
+      </div>
+    </div>
+    
+    <div class="stats-section">
+      <div class="stat">
+        <div class="stat-number" id="responsesGenerated">0</div>
+        <div class="stat-label">Responses Generated</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number" id="sitesSupported">7</div>
+        <div class="stat-label">Sites Supported</div>
+      </div>
+    </div>
+    
+    <div class="supported-sites">
+      <h3>Supported Sites</h3>
+      <div class="sites-grid">
+        <div class="site-item">
+          <div class="site-icon">📺</div>
+          <span>YouTube</span>
+        </div>
+        <div class="site-item">
+          <div class="site-icon">🌍</div>
+          <span>Reddit</span>
+        </div>
+        <div class="site-item">
+          <div class="site-icon">🐦</div>
+          <span>Twitter/X</span>
+        </div>
+        <div class="site-item">
+          <div class="site-icon">📷</div>
+          <span>Instagram</span>
+        </div>
+        <div class="site-item">
+          <div class="site-icon">🎵</div>
+          <span>TikTok</span>
+        </div>
+        <div class="site-item">
+          <div class="site-icon">👥</div>
+          <span>Facebook</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="usage-guide">
+      <h3>How to Use</h3>
+      <ol>
+        <li>Configure your API keys in Settings</li>
+        <li>Navigate to a supported social media site</li>
+        <li>Click the "✨ Craft Response" button next to any comment</li>
+        <li>Choose your response type and generate</li>
+        <li>Copy or use the AI-generated response</li>
+      </ol>
+      <div class="keyboard-shortcut">
+        <strong>Tip:</strong> Select text and press <kbd>Ctrl+Shift+C</kbd> to quickly craft a response
+      </div>
+    </div>
+    
+    <div class="action-buttons">
+      <button id="settingsBtn" class="btn btn-primary">
+        ⚙️ Settings
+      </button>
+      <button id="helpBtn" class="btn btn-secondary">
+        ❓ Help
+      </button>
+    </div>
+    
+    <div class="footer">
+      <div class="links">
+        <a href="#" id="githubLink">GitHub</a>
+        <a href="#" id="rateLink">Rate Extension</a>
+        <a href="#" id="reportBugLink">Report Bug</a>
+      </div>
+    </div>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>

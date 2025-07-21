@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Comment Craft - Settings</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="header-content">
+        <div class="logo">
+          <span class="logo-icon">✨</span>
+          <h1>Comment Craft Settings</h1>
+        </div>
+        <div class="version">v1.0.0</div>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <div class="settings-grid">
+        
+        <!-- API Configuration Section -->
+        <section class="settings-section">
+          <h2>🔑 API Configuration</h2>
+          <p class="section-description">
+            Configure your API keys for different LLM providers. You need at least one API key to use the extension.
+          </p>
+          
+          <div class="api-provider">
+            <div class="provider-header">
+              <h3>OpenAI GPT</h3>
+              <div class="provider-status" id="openaiStatus">Not configured</div>
+            </div>
+            <div class="input-group">
+              <input type="password" id="openaiKey" placeholder="sk-..." class="api-key-input">
+              <button type="button" class="toggle-visibility" data-target="openaiKey">👁️</button>
+            </div>
+            <div class="provider-info">
+              <p>Get your API key from <a href="https://platform.openai.com/api-keys" target="_blank">OpenAI Platform</a></p>
+            </div>
+          </div>
+
+          <div class="api-provider">
+            <div class="provider-header">
+              <h3>Anthropic Claude</h3>
+              <div class="provider-status" id="anthropicStatus">Not configured</div>
+            </div>
+            <div class="input-group">
+              <input type="password" id="anthropicKey" placeholder="sk-ant-..." class="api-key-input">
+              <button type="button" class="toggle-visibility" data-target="anthropicKey">👁️</button>
+            </div>
+            <div class="provider-info">
+              <p>Get your API key from <a href="https://console.anthropic.com/" target="_blank">Anthropic Console</a></p>
+            </div>
+          </div>
+
+          <div class="api-provider">
+            <div class="provider-header">
+              <h3>Google Gemini</h3>
+              <div class="provider-status" id="googleStatus">Not configured</div>
+            </div>
+            <div class="input-group">
+              <input type="password" id="googleKey" placeholder="AI..." class="api-key-input">
+              <button type="button" class="toggle-visibility" data-target="googleKey">👁️</button>
+            </div>
+            <div class="provider-info">
+              <p>Get your API key from <a href="https://makersuite.google.com/app/apikey" target="_blank">Google AI Studio</a></p>
+            </div>
+          </div>
+        </section>
+
+        <!-- General Settings Section -->
+        <section class="settings-section">
+          <h2>⚙️ General Settings</h2>
+          
+          <div class="setting-item">
+            <label for="defaultProvider">Default LLM Provider</label>
+            <select id="defaultProvider">
+              <option value="openai">OpenAI GPT</option>
+              <option value="anthropic">Anthropic Claude</option>
+              <option value="google">Google Gemini</option>
+            </select>
+            <p class="setting-description">Choose which LLM to use by default when generating responses.</p>
+          </div>
+
+          <div class="setting-item">
+            <label for="autoInsert">Auto-insert responses</label>
+            <input type="checkbox" id="autoInsert" class="checkbox">
+            <p class="setting-description">Automatically insert generated responses into comment boxes instead of copying to clipboard.</p>
+          </div>
+
+          <div class="setting-item">
+            <label for="showKeyboardShortcuts">Show keyboard shortcuts</label>
+            <input type="checkbox" id="showKeyboardShortcuts" class="checkbox" checked>
+            <p class="setting-description">Display keyboard shortcut hints in the interface.</p>
+          </div>
+        </section>
+
+        <!-- Response Customization Section -->
+        <section class="settings-section">
+          <h2>💬 Response Customization</h2>
+          
+          <div class="setting-item">
+            <label for="responseLength">Response Length</label>
+            <select id="responseLength">
+              <option value="short">Short (1-2 sentences)</option>
+              <option value="medium" selected>Medium (2-4 sentences)</option>
+              <option value="long">Long (detailed response)</option>
+            </select>
+            <p class="setting-description">Preferred length for generated responses.</p>
+          </div>
+
+          <div class="setting-item">
+            <label for="responseTone">Default Response Tone</label>
+            <select id="responseTone">
+              <option value="professional">Professional</option>
+              <option value="casual" selected>Casual</option>
+              <option value="friendly">Friendly</option>
+              <option value="witty">Witty</option>
+            </select>
+            <p class="setting-description">Default tone for responses when no specific type is selected.</p>
+          </div>
+        </section>
+
+        <!-- Privacy & Security Section -->
+        <section class="settings-section">
+          <h2>🔒 Privacy & Security</h2>
+          
+          <div class="setting-item">
+            <label for="saveHistory">Save response history</label>
+            <input type="checkbox" id="saveHistory" class="checkbox">
+            <p class="setting-description">Keep a local history of generated responses for reference.</p>
+          </div>
+
+          <div class="setting-item">
+            <label for="anonymizeData">Anonymize data sent to APIs</label>
+            <input type="checkbox" id="anonymizeData" class="checkbox" checked>
+            <p class="setting-description">Remove potentially identifying information from comments before sending to LLM providers.</p>
+          </div>
+
+          <div class="privacy-notice">
+            <h4>Privacy Notice</h4>
+            <p>Your API keys are stored locally in your browser and are never sent to our servers. Comments are only sent to the LLM provider you select.</p>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-actions">
+          <button id="saveSettings" class="btn btn-primary">Save Settings</button>
+          <button id="resetSettings" class="btn btn-secondary">Reset to Defaults</button>
+          <button id="testConnection" class="btn btn-outline">Test Connection</button>
+        </div>
+        
+        <div class="footer-links">
+          <a href="#" id="viewLogs">View Logs</a>
+          <a href="#" id="exportSettings">Export Settings</a>
+          <a href="#" id="importSettings">Import Settings</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Test Connection Modal -->
+  <div id="testModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Testing API Connection</h3>
+        <button class="modal-close" id="closeModal">×</button>
+      </div>
+      <div class="modal-body">
+        <div id="testResults"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+{
+  "manifest_version": 2,
+  "name": "Comment Craft (Simple Test)",
+  "version": "1.0.0",
+  "description": "Simple test version of Comment Craft",
+  
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.youtube.com/*"
+      ],
+      "js": ["content-simple.js"],
+      "run_at": "document_end"
+    }
+  ],
+  
+  "browser_action": {
+    "default_title": "Comment Craft Test"
+  },
+  
+  "icons": {
+    "48": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiByeD0iOCIgZmlsbD0iIzc5N0ZGOCIvPgo8dGV4dCB4PSIyNCIgeT0iMzAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPuKcqDwvdGV4dD4KPC9zdmc+"
+  }
+}
